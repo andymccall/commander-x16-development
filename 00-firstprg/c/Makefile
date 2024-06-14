@@ -13,7 +13,7 @@ all:
 	@echo "Building project..."
 	mkdir -p bin
 	mkdir -p lst
-	$(CL65) $(CL65_FLAGS) -o bin/FIRSTPRG.PRG -l lst/firstprg.lst src/main.asm
+	$(CL65) $(CL65_FLAGS) -o bin/FIRSTPRG.PRG -l lst/firstprg.lst src/main.c
 
 clean:
 	@echo "Cleaning project..."
