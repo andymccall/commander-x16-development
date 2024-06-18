@@ -13,7 +13,7 @@ all:
 	@echo "Building project..."
 	mkdir -p bin
 	mkdir -p lst
-	$(CL65) $(CL65_FLAGS) -o bin/SETBORDER.PRG -l lst/setborder.lst src/main.c
+	$(CL65) $(CL65_FLAGS) -o bin/SETMODE.PRG -l lst/setmode.lst src/main.asm
 
 clean:
 	@echo "Cleaning project..."
@@ -23,4 +23,4 @@ clean:
 
 run:
 	@echo "Launching emulator..."
-	$(X16EMU) -prg bin/SETBORDER.PRG -run
+	$(X16EMU) -prg bin/SETMODE.PRG -run

@@ -1,6 +1,6 @@
 
 /* 
- * Title:           03-setframe - C Example
+ * Title:           04-setframe - C Example
  *
  * Description:     A program that sets the frame to red
  * Author:          Andy McCall, mailme@andymccall.co.uk
@@ -14,8 +14,16 @@
 
 #include <cx16.h>
 
+const int VIDEOMODE_22x23 = 0x7;
+
 int main(void) {
 
+   int status;
+
+   /* Set the video mode to a mode with a border */
+   status = videomode(VIDEOMODE_22x23);
+
+   /* Set the border to red */
    VERA.display.border = COLOR_RED;
 
    return 0;
