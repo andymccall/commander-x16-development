@@ -13,6 +13,7 @@
  */
 
 #include <cx16.h>
+#include <conio.h>
 
 const int VIDEOMODE_22x23 = 0x7;
 
@@ -23,8 +24,11 @@ int main(void) {
    /* Set the video mode to a mode with a border */
    status = videomode(VIDEOMODE_22x23);
 
-   /* Set the border to red */
+   /* Set the border to red using VERA calls */
    VERA.display.border = COLOR_RED;
+
+   /* Alternative way using conio.h */
+   /* bordercolor(COLOR_RED); */
 
    return 0;
 
