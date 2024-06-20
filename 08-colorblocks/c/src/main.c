@@ -25,12 +25,19 @@ void print_block(unsigned char color) {
    return;
 }
 
-void restore_colors() {
-   bgcolor(COLOR_BLUE);
-   textcolor(COLOR_WHITE);
+
+void restore_colors(int txtcol, int bgcol) {
+   textcolor(txtcol);
+   bgcolor(bgcol);
 }
 
+
 int main(void) {
+
+   int txtcol, bgcol;
+
+   txtcol = textcolor(COLOR_WHITE);
+   bgcol = bgcolor(COLOR_BLUE);
 
    clrscr();
 
@@ -51,7 +58,7 @@ int main(void) {
    print_block(COLOR_LIGHTBLUE);
    print_block(COLOR_GRAY3);
 
-   restore_colors();
+   restore_colors(txtcol, bgcol);
 
    return 0;
 

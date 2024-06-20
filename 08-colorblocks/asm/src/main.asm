@@ -80,20 +80,32 @@ CH_CYAN                 := $9F
    pla
 .endmacro
 
+; Memory location $0376 contains the original colors for
+; the fg and bg, the high nibble is the bg color and low
+; nibble is fg color.  Save these to resote later in
+; original_colors
+.macro SAVE_COLORS
+   pha
+   lda $0376
+   sta original_colors
+   pla 
+.endmacro
+
+; Writing the saved value in original_colors back to the
+; memory location $0376 will restore the original setting
+; of the fg and bg
 .macro RESTORE_COLORS
    pha
-   lda #CH_BLUE
-   jsr CHROUT
-   lda #CH_COLOR_SWAP
-   jsr CHROUT
-   lda #CH_WHITE
-   jsr CHROUT
+   lda original_colors
+   sta $0376
    pla
 .endmacro
 
 start:
  
    CLEAR_SCREEN
+
+   SAVE_COLORS
 
    PRINT_BLOCK CH_CYAN
    PRINT_BLOCK CH_WHITE
@@ -119,3 +131,5 @@ start:
    rts                                 ; Return to the system
 
 ;-----------------------------------------------------------
+
+original_colors:         .res 1
