@@ -1,12 +1,12 @@
 ;
-; Title:		       07-readchar - Assembler Example
+; Title:		       09-preflet - Preferences Assembler Example
 ;
-; Description:     A program that prints strings to the console
-;                  based on menu input
+; Description:     A program that lets you sets various options
+;                  relating to the video
 ; Author:		    Andy McCall, mailme@andymccall.co.uk
 ;
-; Created:		    2024-06-17 @ 16:43
-; Last Updated:	 2024-06-17 @ 16:43
+; Created:		    2024-06-20 @ 17:32
+; Last Updated:	 2024-06-21 @ 17:00
 ;
 ; Modinfo:
 ;
@@ -26,28 +26,28 @@ ptr: .res 2
 ;-----------------------------------------------------------
 ; Kernal Routines
 
-CHROUT                         := $FFD2 ; This routine will translate the value on the
-                                        ; Accumulator register to a character code, and
-                                        ; output to the default output device.
-CHRIN                          := $FFCF
+CHROUT                  := $FFD2 ; This routine will translate the value on the
+                                 ; Accumulator register to a character code, and
+                                 ; output to the default output device.
+CHRIN                   := $FFCF ;
 
-SCREEN_MODE                    := $FF5F ;
+SCREEN_MODE             := $FF5F ;
 
 ;-----------------------------------------------------------
 ; Constants
 
-INPUT_1                        := $31
-INPUT_2                        := $32
-INPUT_3                        := $33
-INPUT_4                        := $34
-INPUT_5                        := $35
-INPUT_6                        := $36
-INPUT_7                        := $37
-INPUT_8                        := $38
-INPUT_9                        := $39
+INPUT_1                 := $31
+INPUT_2                 := $32
+INPUT_3                 := $33
+INPUT_4                 := $34
+INPUT_5                 := $35
+INPUT_6                 := $36
+INPUT_7                 := $37
+INPUT_8                 := $38
+INPUT_9                 := $39
 
-CR                             := $0D   ; ASCII/PETSCII code for carraige return
-STR_PTR                        := $30   ; ASCII/PETSCII cide for zero
+CR                      := $0D   ; ASCII/PETSCII code for carraige return
+STR_PTR                 := $30   ; ASCII/PETSCII cide for zero
 
 ; Video modes
 VIDEOMODE_80x60         := $00
@@ -135,6 +135,20 @@ CH_CYAN                 := $9F
    pla
 .endmacro
 
+.macro SET_TEXT_COLOR color
+   pha
+   lda #color
+   jsr CHROUT
+   pla
+.endmacro
+
+.macro SET_BORDER_COLOR color
+   pha
+   lda #color
+   sta VERA::DISP::FRAME               ; Call VERA to set the frame to the colour in a
+   pla
+.endmacro
+
 ;-----------------------------------------------------------
 
 start:
@@ -147,7 +161,6 @@ top_showmenu:
    PRINT_STRING resolution_menu_item
    PRINT_STRING text_color_menu_item
    PRINT_STRING background_color_menu_item
-   PRINT_STRING border_color_menu_item
    PRINT_STRING clear_screen_menu_item
    PRINT_STRING quit_menu_item
    PRINTCR
@@ -178,16 +191,10 @@ top_showmenu:
    cmp #INPUT_4
    bne @check_5
    PRINTCR
-   jmp border_color_menu
-   PRINTCR
+   CLEAR_SCREEN
    beq @done
 @check_5:
    cmp #INPUT_5
-   bne @check_6
-   CLEAR_SCREEN
-   beq @done
-@check_6:
-   cmp #INPUT_6
    beq @quit
 @done:
    PRINTCR
@@ -282,38 +289,46 @@ text_color_menu:
 @check_1:
    cmp #INPUT_1
    bne @check_2
-   bra @done
+   SET_TEXT_COLOR CH_WHITE
+   jmp @done
 @check_2:
    cmp #INPUT_2
    bne @check_3
-   bra @done
+   SET_TEXT_COLOR CH_RED
+   jmp @done
 @check_3:
    cmp #INPUT_3
    bne @check_4
-   beq @done
+   SET_TEXT_COLOR CH_GREEN
+   jmp @done
 @check_4:
    cmp #INPUT_4
    bne @check_5
-   beq @done
+   SET_TEXT_COLOR CH_BLUE
+   jmp @done
 @check_5:
    cmp #INPUT_5
    bne @check_6
-   beq @done
+   SET_TEXT_COLOR CH_ORANGE
+   jmp @done
 @check_6:
    cmp #INPUT_6
    bne @check_7
-   beq @done
+   SET_TEXT_COLOR CH_BLACK
+   jmp @done
 @check_7:
    cmp #INPUT_7
    bne @check_8
-   beq @done
+   SET_TEXT_COLOR CH_BROWN
+   jmp @done
 @check_8:
    cmp #INPUT_8
    bne @check_9
-   beq @done
+   SET_TEXT_COLOR CH_PINK
+   jmp @done
 @check_9:
    cmp #INPUT_9
-   beq @back
+   jmp @back
 @done:
    PRINTCR
    jmp text_color_menu
@@ -341,102 +356,48 @@ background_color_menu:
    cmp #INPUT_1
    bne @check_2
    SET_BACKGROUND_COLOR CH_WHITE
-   bra @done
+   jmp @done
 @check_2:
    cmp #INPUT_2
    bne @check_3
    SET_BACKGROUND_COLOR CH_RED
-   bra @done
+   jmp @done
 @check_3:
    cmp #INPUT_3
    bne @check_4
    SET_BACKGROUND_COLOR CH_GREEN
-   beq @done
+   jmp @done
 @check_4:
    cmp #INPUT_4
    bne @check_5
    SET_BACKGROUND_COLOR CH_BLUE
-   beq @done
+   jmp @done
 @check_5:
    cmp #INPUT_5
    bne @check_6
-   beq @done
+   SET_BACKGROUND_COLOR CH_ORANGE
+   jmp @done
 @check_6:
    cmp #INPUT_6
    bne @check_7
-   beq @done
+   SET_BACKGROUND_COLOR CH_BLACK
+   jmp @done
 @check_7:
    cmp #INPUT_7
    bne @check_8
-   beq @done
+   SET_BACKGROUND_COLOR CH_BROWN
+   jmp @done
 @check_8:
    cmp #INPUT_8
    bne @check_9
-   beq @done
+   SET_BACKGROUND_COLOR CH_PINK
+   jmp @done
 @check_9:
    cmp #INPUT_9
-   beq @back
+   jmp @back
 @done:
    PRINTCR
    jmp background_color_menu
-@back:
-   PRINTCR
-   jmp top_showmenu
-
-border_color_menu:
-   PRINT_STRING border_color_header
-   PRINTCR
-   PRINT_STRING white_item
-   PRINT_STRING red_item
-   PRINT_STRING green_item
-   PRINT_STRING blue_item
-   PRINT_STRING orange_item
-   PRINT_STRING black_item
-   PRINT_STRING brown_item
-   PRINT_STRING pink_item
-   PRINT_STRING back_item
-   PRINTCR
-   PRINT_PROMPT prompt
-@getinput:
-   jsr CHRIN
-@check_1:
-   cmp #INPUT_1
-   bne @check_2
-   bra @done
-@check_2:
-   cmp #INPUT_2
-   bne @check_3
-   bra @done
-@check_3:
-   cmp #INPUT_3
-   bne @check_4
-   beq @done
-@check_4:
-   cmp #INPUT_4
-   bne @check_5
-   beq @done
-@check_5:
-   cmp #INPUT_5
-   bne @check_6
-   beq @done
-@check_6:
-   cmp #INPUT_6
-   bne @check_7
-   beq @done
-@check_7:
-   cmp #INPUT_7
-   bne @check_8
-   beq @done
-@check_8:
-   cmp #INPUT_8
-   bne @check_9
-   beq @done
-@check_9:
-   cmp #INPUT_9
-   beq @back
-@done:
-   PRINTCR
-   jmp border_color_header
 @back:
    PRINTCR
    jmp top_showmenu
@@ -465,9 +426,8 @@ menu_header:                 .asciiz "menu"
 resolution_menu_item:        .asciiz "[1] change resolution"
 text_color_menu_item:        .asciiz "[2] change text color"
 background_color_menu_item:  .asciiz "[3] change background color"
-border_color_menu_item:      .asciiz "[4] change border color"
-clear_screen_menu_item:      .asciiz "[5] clear the screen"
-quit_menu_item:              .asciiz "[6] quit"
+clear_screen_menu_item:      .asciiz "[4] clear the screen"
+quit_menu_item:              .asciiz "[5] quit"
 prompt:                      .asciiz "selection >"
 
 resolution_header:           .asciiz "resolution"
