@@ -8,7 +8,6 @@ Install the following Extensions
 
 https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools  
 https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack  
-https://marketplace.visualstudio.com/items?itemName=SharpNinja.cc65  
 
 ### Install cc65
 
@@ -17,6 +16,7 @@ username@host:~$ cd ~
 username@host:~$ mkdir development
 username@host:~$ cd development
 username@host:~$ git clone git@github.com:cc65/cc65.git
+username@host:~$ make
 username@host:~$ make install PREFIX=~/development/tools/cc65
 ```
 
@@ -55,7 +55,8 @@ https://github.com/X16Community/x16-emulator/releases/
 Download the latest release.
 
 ```
-username@host:~$ unzip x16emu_linux-x86_64-r47.zip -d ~/development/tools/x16emu
+username@host:~$ wget https://github.com/X16Community/x16-emulator/releases/download/r48/x16emu_linux-x86_64-r48.zip
+username@host:~$ unzip x16emu_linux-x86_64-r48.zip -d ~/development/tools/x16emu
 ```
 
 Add the emulator to path:
