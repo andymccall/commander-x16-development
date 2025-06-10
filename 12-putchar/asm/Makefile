@@ -13,8 +13,7 @@ all:
 	@echo "Building project..."
 	mkdir -p bin
 	mkdir -p lst
-	$(CL65) $(CL65_FLAGS) -o bin/DISPLAYBMX.PRG -l lst/menu.lst src/main.asm
-	cp -r src/ASSETS bin/
+	$(CL65) $(CL65_FLAGS) -o bin/PUTCHAR.PRG -l lst/menu.lst src/main.asm
 
 clean:
 	@echo "Cleaning project..."
@@ -24,4 +23,4 @@ clean:
 
 run:
 	@echo "Launching emulator..."
-	$(X16EMU) -prg bin/DISPLAYBMX.PRG
+	$(X16EMU) -prg bin/PUTCHAR.PRG

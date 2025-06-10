@@ -2,7 +2,7 @@
 # Makefile Options
 # ----------------------------
 
-NAME	   = FIRSTPRG
+NAME	   = DRAWIMAGE
 CL65       = cl65
 CL65_FLAGS = -t cx16
 RM         = rm -f
