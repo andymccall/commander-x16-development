@@ -90,12 +90,12 @@ start:
    lda #>image_data
    sta r2H
 
-   lda #130
+   lda #64
    sta r3L
    lda #0
    sta r3H
 
-   lda #10
+   lda #64
    sta r4L
    lda #0
    sta r4H
