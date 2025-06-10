@@ -21,6 +21,7 @@
 
 ; Equates
 SCREEN_MODE                      = $FF5F
+GRAPH_init                       = $FF20
 GRAPH_draw_image                 = $FF44
 GRAPH_clear                      = $FF23
 GRAPH_set_colors                 = $FF29
@@ -53,14 +54,16 @@ image_data:
     .incbin "../assets/draw_image.bin"
 
 start:
+   
+   jsr GRAPH_init
 
    lda #<SCREEN_MODE_320X240_256C
    clc
    jsr SCREEN_MODE
 
-   lda #$01             ; Stroke
-   ldx #$01             ; Fill
-   ldy #$00             ; background
+   lda #$00             ; Stroke
+   ldx #$00             ; Fill
+   ldy #$01             ; background
    jsr GRAPH_set_colors
    
    jsr GRAPH_clear
