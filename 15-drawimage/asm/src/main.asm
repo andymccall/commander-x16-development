@@ -25,6 +25,8 @@ GRAPH_init                       = $FF20
 GRAPH_draw_image                 = $FF44
 GRAPH_clear                      = $FF23
 GRAPH_set_colors                 = $FF29
+GRAPH_put_char                   = $FF41
+
 
 ; Kernal Registers
 r0		                           = $02
@@ -51,7 +53,8 @@ r4H		                        = r4+1
 SCREEN_MODE_320X240_256C         = $80
 
 image_data:
-    .incbin "../assets/draw_image.bin"
+    .incbin "../assets/8BG.BIN"
+    ;.incbin "../assets/draw_image.bin"
 
 start:
    
@@ -68,12 +71,29 @@ start:
    
    jsr GRAPH_clear
 
-   lda #128
+; Put a T on the screen to test output
+   lda #100
    sta r0L
    lda #0
    sta r0H
 
-   lda #88
+   lda #50
+   sta r1L
+   lda #0
+   sta r1H
+
+   lda #'T'
+
+   jsr GRAPH_put_char
+
+; Put image
+
+   lda #10
+   sta r0L
+   lda #0
+   sta r0H
+
+   lda #10
    sta r1L
    lda #0
    sta r1H
