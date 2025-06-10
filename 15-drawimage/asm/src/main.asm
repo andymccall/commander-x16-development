@@ -17,9 +17,13 @@
 .segment "ONCE"
 .segment "CODE"
 
+   jmp start
+
 ; Equates
 SCREEN_MODE                      = $FF5F
 GRAPH_draw_image                 = $FF44
+GRAPH_clear                      = $FF23
+GRAPH_set_colors                 = $FF29
 
 ; Kernal Registers
 r0		                           = $02
@@ -48,13 +52,20 @@ SCREEN_MODE_320X240_256C         = $80
 image_data:
     .incbin "../assets/draw_image.bin"
 
-   jmp start
-
 start:
 
    lda #<SCREEN_MODE_320X240_256C
    clc
    jsr SCREEN_MODE
+
+   lda #$01             ; Stroke
+   ldx #$01             ; Fill
+   ldy #$00             ; background
+   jsr GRAPH_set_colors
+   
+   jsr GRAPH_clear
+
+loop:
 
    lda #128
    sta r0L
@@ -83,4 +94,4 @@ start:
 
    jsr GRAPH_draw_image
 
-   rts
+   jmp loop
