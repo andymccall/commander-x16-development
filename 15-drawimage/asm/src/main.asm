@@ -20,13 +20,15 @@
    jmp start
 
 ; Equates
+GETIN                            = $FFE4
 SCREEN_MODE                      = $FF5F
 GRAPH_init                       = $FF20
-GRAPH_draw_image                 = $FF44
+GRAPH_draw_image                 = $FF38
 GRAPH_clear                      = $FF23
 GRAPH_set_colors                 = $FF29
-GRAPH_put_char                   = $FF41
+enter_basic                      = $FF47
 
+QUIT                             = $51
 
 ; Kernal Registers
 r0		                           = $02
@@ -51,10 +53,10 @@ r4H		                        = r4+1
 
 ; Screen mode
 SCREEN_MODE_320X240_256C         = $80
+SCREEN_MODE_80X60                = $00
 
 image_data:
-    .incbin "../assets/8BG.BIN"
-    ;.incbin "../assets/draw_image.bin"
+    .incbin "../assets/draw_image.bin"
 
 start:
    
@@ -66,25 +68,10 @@ start:
 
    lda #$00             ; Stroke
    ldx #$00             ; Fill
-   ldy #$01             ; background
+   ldy #$00             ; background
    jsr GRAPH_set_colors
    
    jsr GRAPH_clear
-
-; Put a T on the screen to test output
-   lda #100
-   sta r0L
-   lda #0
-   sta r0H
-
-   lda #50
-   sta r1L
-   lda #0
-   sta r1H
-
-   lda #'T'
-
-   jsr GRAPH_put_char
 
 ; Put image
 
@@ -103,12 +90,12 @@ start:
    lda #>image_data
    sta r2H
 
-   lda #64
+   lda #130
    sta r3L
    lda #0
    sta r3H
 
-   lda #64
+   lda #10
    sta r4L
    lda #0
    sta r4H
@@ -116,5 +103,15 @@ start:
    jsr GRAPH_draw_image
 
 loop:
-   ; loop forever
+   jsr GETIN
+   cmp #QUIT
+   beq quit
    jmp loop
+
+; Reset screen mode and drop back to BASIC
+quit:
+   lda #<SCREEN_MODE_80X60
+   clc
+   jsr SCREEN_MODE
+   sec
+   jsr enter_basic    ; enter BASIC sec for cold restart.
