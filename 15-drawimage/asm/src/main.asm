@@ -65,8 +65,6 @@ start:
    
    jsr GRAPH_clear
 
-loop:
-
    lda #128
    sta r0L
    lda #0
@@ -94,4 +92,6 @@ loop:
 
    jsr GRAPH_draw_image
 
+loop:
+   ; loop forever
    jmp loop
